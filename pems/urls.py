@@ -20,6 +20,7 @@ from django.conf.urls import include
 from mvc import views
 
 urlpatterns = [
+    url(r'mvc/', include('mvc.urls')),
     path('admin/', admin.site.urls),
     url(r'', views.index),
     
