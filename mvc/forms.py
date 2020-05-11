@@ -3,10 +3,10 @@ from mvc.models import *
 
 class SiteForm(ModelForm):
     class Meta:
-        model = examSite
+        model = ExamSite
         fields = '__all__'
 
 class ExamForm(ModelForm):
     class Meta:
-        model = exam
+        model = Exam
         fields = '__all__'
