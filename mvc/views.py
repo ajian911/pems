@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+from django.template import loader
 from mvc.forms import *
 
 # Create your views here.
@@ -44,5 +45,12 @@ def addSite(request):
     return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'addSite.html'), {'form':form})  
 
 @csrf_exempt
-def showExamList(request):
-    pass
+def getExamList(request):
+    _template = loader.get_template('examList.html')
+    _exams = Exam.objects.order_by('-id')
+    print(_exams)
+    _context = {
+        'exam' :  _exams,
+    }
+    _output = _template.render(_context)
+    return HttpResponse(_output)

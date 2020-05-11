@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>考试项目列表</title>
+</head>
+
+<body>
+    <div>
+        <ol>
+            {% for eaxm in examList %}
+            <li>
+                {{ exam.name }}
+            </li>
+            {% endfor%}
+        </ol>
+    </div>
+</body>
+
+</html>
