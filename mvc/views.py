@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 from mvc.forms import *
+from utils.formatter import pageBar
 
 # Create your views here.
 def index(request):
@@ -45,12 +46,23 @@ def addSite(request):
     return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'addSite.html'), {'form':form})  
 
 @csrf_exempt
-def getExamList(request):
-    _template = loader.get_template('examList.html')
-    _exams = Exam.objects.order_by('-id')
-    print(_exams)
-    _context = {
-        'exam' :  _exams,
+def getExamList(request, pageIndex):
+    print("the pageIndex is {}".format(pageIndex))
+    #_template = loader.get_template('examList.html')
+    examList = Exam.objects.all().order_by('-id')
+    #print(_exams)
+    context = {
+        'examList' :  examList,
     }
-    _output = _template.render(_context)
-    return HttpResponse(_output)
+    #_output = _template.render(_context)
+    #return HttpResponse(_output)
+    index_page(request, pageIndex)
+    return render(request, "examList.html", context)
+
+@csrf_exempt
+def index_page(request, pageIndex):
+    examObj = Exam.objects.all()
+    examList = []
+    for each in examObj:
+            examList.append(each)
+    pageBar(request, examList, int(pageIndex))

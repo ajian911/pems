@@ -11,12 +11,15 @@
     <div>
         <h1>这是考试项目列表页面</h1>
         <ol>
-            {% for eaxm in examList %}
+            {% for eachExam in examList %}
             <li>
-                {{ exam.name }}
+                {{ eachExam.name }}   {{ eachExam.date }} 
             </li>
-            {% endfor%}
+            {% endfor %}
         </ol>
+    </div>
+    <div>
+        {% include 'control/pagebar.html' %}
     </div>
 </body>
 
