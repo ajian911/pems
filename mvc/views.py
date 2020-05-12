@@ -5,10 +5,13 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
+from django.core.paginator import Paginator
 from mvc.forms import *
 from utils.formatter import pageBar
 
 # Create your views here.
+PAGE_SIZE = 3
+
 def index(request):
     return HttpResponse("<h1>欢迎来到人事考试管理系统！</h1>")
 
@@ -48,21 +51,26 @@ def addSite(request):
 @csrf_exempt
 def getExamList(request, pageIndex):
     print("the pageIndex is {}".format(pageIndex))
+    pageIndex = int(pageIndex)
     #_template = loader.get_template('examList.html')
-    examList = Exam.objects.all().order_by('-id')
-    #print(_exams)
+    examList = Exam.objects.all().order_by('id')  #'-id'倒序
+    _paginator = Paginator(examList, PAGE_SIZE)
+    currentPage = _paginator.get_page(pageIndex)
     context = {
-        'examList' :  examList,
+        'examList' :  currentPage,
+        'request' :  request,
+        'pagiator' :  _paginator,
+        'has_pages' :  _paginator.num_pages > 1,
+        'has_next' :  _paginator.page(pageIndex).has_next(),
+        'has_prev' : _paginator.page(pageIndex).has_previous(),
+        'page_index' : pageIndex,
+        'page_next' : pageIndex + 1,
+        'page_prev' : pageIndex - 1,
+        'page_count' : _paginator.num_pages,
+        'row_count' : _paginator.count,
+        'page_nums' : range(_paginator.num_pages + 1)[1:],
     }
     #_output = _template.render(_context)
     #return HttpResponse(_output)
-    index_page(request, pageIndex)
+    #index_page(request, pageIndex)
     return render(request, "examList.html", context)
-
-@csrf_exempt
-def index_page(request, pageIndex):
-    examObj = Exam.objects.all()
-    examList = []
-    for each in examObj:
-            examList.append(each)
-    pageBar(request, examList, int(pageIndex))

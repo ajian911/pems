@@ -10,10 +10,10 @@
 <body>
     <div>
         <h1>这是考试项目列表页面</h1>
-        <ol>
+        <ol style = "list-style:none">
             {% for eachExam in examList %}
             <li>
-                {{ eachExam.name }}   {{ eachExam.date }} 
+                {{ eachExam.id }}  {{ eachExam.name }}   {{ eachExam.date }} 
             </li>
             {% endfor %}
         </ol>

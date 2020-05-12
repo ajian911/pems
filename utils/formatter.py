@@ -1,10 +1,9 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator
 
-PAGE_SIZE = 3
 def pageBar(request, objects, pageIndex, template = 'control/pageBar.html'):
     pageIndex = int(pageIndex)
-    _paginator = Paginator(objects, PAGE_SIZE)
+    _paginator = Paginator(objects, 5)
     return render(request, template, {
         'request' :  request,
         'pagiator' :  _paginator,
