@@ -74,3 +74,8 @@ def getExamList(request, pageIndex):
     #return HttpResponse(_output)
     #index_page(request, pageIndex)
     return render(request, "examList.html", context)
+
+
+@csrf_exempt
+def setPrintService(request):
+     return HttpResponse("<h1>这里是准考证或通知书设置页面！</h1>")

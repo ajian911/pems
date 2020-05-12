@@ -70,7 +70,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pems.wsgi.application'
 
-
+UPLOAD_ROOT = os.path.join(BASE_DIR,'upload')
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 

@@ -13,7 +13,12 @@
         <ol style = "list-style:none">
             {% for eachExam in examList %}
             <li>
-                {{ eachExam.id }}  {{ eachExam.name }}   {{ eachExam.date }} 
+                {{ eachExam.id }}  {{ eachExam.name }} {{ eachExam.examMethod }}  {{ eachExam.date }} 
+                {% ifequal eachExam.examMethod '笔试' %}
+                    <a href="/mvc/setPrintService/"><input type="button" value='准考证打印设置'></a>
+                {% else %}
+                    <a href="/mvc/setPrintService/"><input type="button" value='通知书打印设置'></a>
+                {% endifequal%}
             </li>
             {% endfor %}
         </ol>

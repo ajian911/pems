@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'addExam', views.addExam),
     #url(r'^getExamList/?P<pageIndex>(\d+)/$', views.getExamList),
     path('getExamList/<pageIndex>', views.getExamList),
+    url(r'setPrintService/', views.setPrintService),
     url(r'4', views.addExamResult, name = 'add-exam-result'),
     url(r'5', views.addSiteResult, name = 'add-site-result'),
 ]
