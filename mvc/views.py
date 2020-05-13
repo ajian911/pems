@@ -50,8 +50,11 @@ def addSite(request):
 
 @csrf_exempt
 def getExamList(request, pageIndex):
-    print("the pageIndex is {}".format(pageIndex))
-    pageIndex = int(pageIndex)
+    #print("the pageIndex is {}".format(pageIndex))
+    if(pageIndex == ''):
+        pageIndex = 1
+    else:
+        pageIndex = int(pageIndex)
     #_template = loader.get_template('examList.html')
     examList = Exam.objects.all().order_by('id')  #'-id'倒序
     _paginator = Paginator(examList, PAGE_SIZE)
@@ -77,5 +80,28 @@ def getExamList(request, pageIndex):
 
 
 @csrf_exempt
-def setPrintService(request):
-     return HttpResponse("<h1>这里是准考证或通知书设置页面！</h1>")
+def setPrintService(request, examId):
+     currentExam = Exam.objects.get(id = examId)
+     #print("The currentExam name is {}".format(currentExam.name))
+     context = {
+         'currentExam' :  currentExam,
+     }
+     return render(request, "printService.html", context)
+
+@csrf_exempt
+def upload(request):
+    PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
+    #print("The PROJECT_ROOT is {}".format(PROJECT_ROOT))
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            files = request.FILES.getlist('file')
+            for eachFile in files:
+                fileInfo = FileInfo(name = eachFile.name, size = 1 if 0 < eachFile.size < 1024 else eachFile.size / 1024, path = os.path.join(PROJECT_ROOT, 'upload'))
+                fileInfo.save()
+                destination = open(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), 'wb+')
+                for chunk in eachFile.chunks():
+                    destination.write(chunk)
+                    destination.close()
+    return HttpResponse("<h1>文件上传成功</h1>") #应返回打印设置页面
+            

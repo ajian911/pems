@@ -2,13 +2,13 @@
     {% ifequal page_index 1 %}
         首页
     {% else %}
-        <a href = "/mvc/getExamList/1">首页</a>
+        <a href = "/mvc/getExamList/1/">首页</a>
     {% endifequal%}
 </span>
 
 <span class = "prev">
     {% if has_prev %}
-       <a href = "/mvc/getExamList/{{page_prev}}"> 上一页 </a>
+       <a href = "/mvc/getExamList/{{page_prev}}/"> 上一页 </a>
     {% else %}
         上一页
     {% endif %}
@@ -16,7 +16,7 @@
 
 <span class = "next">
     {% if has_next %}   
-     <a href = "/mvc/getExamList/{{page_next}}"> 下一页 </a>
+     <a href = "/mvc/getExamList/{{page_next}}/"> 下一页 </a>
     {% else %}
         下一页
     {% endif %}
@@ -26,6 +26,6 @@
     {% ifequal page_index page_count %}
         末页
     {% else %}
-        <a href = "/mvc/getExamList/{{page_count}}"> 末页 </a>
+        <a href = "/mvc/getExamList/{{page_count}}/"> 末页 </a>
     {% endifequal%}
 </span>

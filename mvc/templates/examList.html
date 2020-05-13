@@ -15,9 +15,9 @@
             <li>
                 {{ eachExam.id }}  {{ eachExam.name }} {{ eachExam.examMethod }}  {{ eachExam.date }} 
                 {% ifequal eachExam.examMethod '笔试' %}
-                    <a href="/mvc/setPrintService/"><input type="button" value='准考证打印设置'></a>
+                    <a href="/mvc/setPrintService/{{ eachExam.id }}/"><input type="button" value='准考证打印设置'></a>
                 {% else %}
-                    <a href="/mvc/setPrintService/"><input type="button" value='通知书打印设置'></a>
+                    <a href="/mvc/setPrintService/{{ eachExam.id }}/"><input type="button" value='通知书打印设置'></a>
                 {% endifequal%}
             </li>
             {% endfor %}

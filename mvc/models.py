@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 # Create your models here.
 class Exam(models.Model):  #考试模型类
@@ -61,3 +62,9 @@ class ExamStuff(models.Model): #考务材料模型类
     amount = models.IntegerField('数量')
     stuffType = models.CharField('类别', max_length = 20) #消耗品|非消耗品
     remarks = models.TextField('备注', max_length = 500)
+
+class FileInfo(models.Model):
+    name = models.CharField('文件名', max_length = 50)
+    size = models.DecimalField("文件大小", max_digits = 10, decimal_places = 0)
+    path = models.CharField("文件路径", max_length = 200)
+    time = models.DateTimeField("上传时间", default = timezone.now())

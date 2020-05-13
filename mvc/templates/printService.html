@@ -4,13 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>打印设置页面</title>
 </head>
 
 <body>
-    <form id="form" enctype="multipart/form-data" action="/upload/" method="post">
+    <div>当前考试: {{currentExam.name}}</div>
+    <form enctype="multipart/form-data" action="upload/" method="post">
+        {% csrf_token %}
         <p><input type="file" name="file"></p>
-        <input type="submit" name="上传数据文件">
+        <input type="submit" name="上传文件">
     </form>
 </body>
 
