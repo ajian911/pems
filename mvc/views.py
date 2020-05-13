@@ -83,13 +83,15 @@ def getExamList(request, pageIndex):
 def setPrintService(request, examId):
      currentExam = Exam.objects.get(id = examId)
      #print("The currentExam name is {}".format(currentExam.name))
+     #最近上传的导入数据文件
+
      context = {
          'currentExam' :  currentExam,
      }
      return render(request, "printService.html", context)
 
 @csrf_exempt
-def upload(request):
+def upload(request, examId):
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
     #print("The PROJECT_ROOT is {}".format(PROJECT_ROOT))
     if request.method == 'POST':
@@ -97,11 +99,19 @@ def upload(request):
         if form.is_valid():
             files = request.FILES.getlist('file')
             for eachFile in files:
-                fileInfo = FileInfo(name = eachFile.name, size = 1 if 0 < eachFile.size < 1024 else eachFile.size / 1024, path = os.path.join(PROJECT_ROOT, 'upload'))
+                fileInfo = FileInfo(examId = examId, name = eachFile.name, size = 1 if 0 < eachFile.size < 1024 else eachFile.size / 1024, path = os.path.join(PROJECT_ROOT, 'upload'))
                 fileInfo.save()
                 destination = open(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), 'wb+')
                 for chunk in eachFile.chunks():
                     destination.write(chunk)
                     destination.close()
     return HttpResponse("<h1>文件上传成功</h1>") #应返回打印设置页面
-            
+
+@csrf_exempt
+def download(request, fileId):
+    fileInfo = FileInfo.objects.get(id = fileId)       
+    file = open(fileInfo.path, 'rb')
+    response = FileResponse(file)
+    response['Content-Disposition'] = 'attachment;filename="%s"' % urlquote(fileInfo.name)
+    return response
+   

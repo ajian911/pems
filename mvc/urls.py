@@ -5,7 +5,8 @@ from . import views
 urlpatterns = [
     url(r'addSite', views.addSite),
     url(r'addExam', views.addExam),
-    re_path(r'upload/$', views.upload, name = 'upload'),
+    re_path(r'upload/(?P<examId>[0-9]+)$', views.upload, name = 'upload'),
+    re_path(r'^download/(?P<fileId>[0-9]+)/$', views.download, name = 'download'),
     #url(r'^getExamList/?P<pageIndex>(\d+)/$', views.getExamList),
     re_path(r'^getExamList/(?P<pageIndex>[0-9]*)/$', views.getExamList),
     #path('setPrintService/<examId>', views.setPrintService),

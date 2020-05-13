@@ -8,8 +8,13 @@
 </head>
 
 <body>
-    <div>当前考试: {{currentExam.name}}</div>
-    <form enctype="multipart/form-data" action="upload/" method="post">
+    <div>当前考试名称: {{currentExam.name}} &nbsp;&nbsp;考试形式:{{currentExam.examMethod}}
+        <a href="/mvc/download/999/"><input type="button" value='数据模板下载'></a></div>
+    <div>
+        最新上传的数据文件:
+    </div>
+    
+    <form enctype="multipart/form-data" action="upload/{{currentExam.id}}" method="post">
         {% csrf_token %}
         <p><input type="file" name="file"></p>
         <input type="submit" name="上传文件">

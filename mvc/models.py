@@ -64,6 +64,7 @@ class ExamStuff(models.Model): #考务材料模型类
     remarks = models.TextField('备注', max_length = 500)
 
 class FileInfo(models.Model):
+    examId = models.CharField('关联考试ID', max_length = 20, blank=True)
     name = models.CharField('文件名', max_length = 50)
     size = models.DecimalField("文件大小", max_digits = 10, decimal_places = 0)
     path = models.CharField("文件路径", max_length = 200)
