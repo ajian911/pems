@@ -7,7 +7,7 @@ def excelImport2Db(excelFile, table, examId):
     dataSheet = wb.get_sheet_by_name('data')
     print("the max row of dataSheet is {}, and the max column of dataSheet is {}".format(dataSheet.max_row, dataSheet.max_column))
     #columnTitle = ["考生姓名","身份证号","准考证号","报考单位","报考职位","手机号码","考点地址","考点名称","考试日期","科目名称","科目时间"]
-    if(table == 'admissionticket'):
+    if(table == 'AT'):
         AdmissionTicket.objects.filter(examID = examId).delete() #先清空上次的导入数据
         for eachRow in range(2, dataSheet.max_row + 1): #第2行数据开始
             admissionTicket = AdmissionTicket(
@@ -25,7 +25,7 @@ def excelImport2Db(excelFile, table, examId):
                 subjectTime = dataSheet.cell(eachRow, getColumnIndex(dataSheet, "科目时间")).value
             )
             admissionTicket.save()
-    elif(table == 'interviewnotification'):
+    elif(table == 'IN'):
         pass
 
     
