@@ -14,6 +14,10 @@
     {% endif %}
 </span>
 
+<span class = "page">
+    {{ page_index }} / {{ page_count }}
+</span>
+
 <span class = "next">
     {% if has_next %}   
      <a href = "/mvc/getExamList/{{page_next}}/"> 下一页 </a>
@@ -28,4 +32,8 @@
     {% else %}
         <a href = "/mvc/getExamList/{{page_count}}/"> 末页 </a>
     {% endifequal%}
+</span>
+
+<span class = "tip">
+    共 {{ row_count }} 条记录
 </span>

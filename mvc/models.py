@@ -2,38 +2,76 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
+#考试类别
+TYPE_CHOICES = (
+    ("公务员考录" , "公务员考录"),
+    ("事业招聘" , "事业招聘"), 
+    ("专业技术资格" , "专业技术资格"),
+    ("社会化考试" , "社会化考试"),
+)
+#考试形式
+METHOD_CHOICES = (
+    ("面试" , "面试"),
+    ("笔试" , "笔试"), 
+    ("机考" , "机考"),
+)
+
 class Exam(models.Model):  #考试模型类
     name = models.CharField('考试名称', max_length = 100)
     date = models.DateField('考试日期')
-    siteName = models.CharField('考点名称', max_length = 100)
-    adress = models.CharField('考点地址', max_length = 100)
-    examineeNum = models.IntegerField('考生人数')
-    examType = models.CharField('考试类别', max_length = 20)
-    examMethod = models.CharField('考试方式', max_length = 20)
-    remarks = models.TextField('备注', max_length = 500)
+    siteName = models.CharField('考点名称', max_length = 100, blank = True)
+    adress = models.CharField('考点地址', max_length = 100, blank = True)
+    examineeNum = models.IntegerField('考生人数', blank = True)
+    examType = models.CharField('考试类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
+    examMethod = models.CharField('考试形式', max_length = 20, choices = METHOD_CHOICES, default = METHOD_CHOICES[1])
+    remarks = models.TextField('备注', max_length = 500, blank = True)
 
 class Examinee(models.Model): #考生模型类
     name = models.CharField('考生姓名', max_length = 20)
-    idNumber = models.CharField('身份证号', max_length = 18)
-    examId = models.CharField('准考证号', max_length = 11)
+    IDNumber = models.CharField('身份证号', max_length = 18)
+    ATID = models.CharField('准考证号', max_length = 11)
 
 
 class AdmissionTicket(models.Model): #笔试准考证模型
-    theExam = models.ForeignKey(Exam, on_delete = models.CASCADE) #考试-准考证：一对多
-    theExaminee = models.OneToOneField(Examinee, on_delete = models.CASCADE, primary_key = True)  #考生-准考证：一对一
-    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False)
-    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False)
-    ifQuery = models.BooleanField("是否已查询")
-    ifPrint = models.BooleanField("是否已打印")
+    examID = models.CharField("关联考试", max_length = 20) 
+    name = models.CharField("考生姓名", max_length = 20)  
+    IDNumber = models.CharField("身份证号", max_length = 18)
+    ATID = models.CharField("准考证号", max_length = 11)
+    applyUnit = models.CharField("报考单位", max_length = 100, blank = True, null = True)
+    applyPosition = models.CharField("报考职位", max_length = 100, blank = True, null = True)
+    phone = models.CharField("手机号码", max_length = 11, blank = True, null = True)
+    date = models.DateField('考试日期', blank = True, null = True)
+    siteName = models.CharField('考点名称', max_length = 100, blank = True, null = True)
+    address = models.CharField('考点地址', max_length = 100, blank = True, null = True)
+    subjectName = models.CharField('考试科目', max_length = 100, blank = True, null = True)
+    subjectTime = models.CharField('科目时间', max_length = 100, blank = True, null = True)
+    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
+    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True)
+    ifQuery = models.BooleanField("是否已查询", default = '0') #0未查询，1已查询
+    ifPrint = models.BooleanField("是否已打印", default = '0') #0未打印，1已打印
+    state = models.BooleanField("当前状态", default = '0') #0未启动，1启动中
     
 
 class InterviewNotification(models.Model): #面试通知书模型
-    theExam = models.ForeignKey(Exam, on_delete = models.CASCADE) 
-    theExaminee = models.OneToOneField(Examinee, on_delete = models.CASCADE, primary_key = True) 
-    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False)
-    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False) 
-    ifQuery = models.BooleanField("是否已查询")
-    ifPrint = models.BooleanField("是否已打印")
+    examID = models.CharField("关联考试", max_length = 20) 
+    name = models.CharField("考生姓名", max_length = 20)  
+    IDNumber = models.CharField("身份证号", max_length = 18)
+    ATID = models.CharField("准考证号", max_length = 11)
+    applyUnit = models.CharField("报考单位", max_length = 100, blank = True, null = True)
+    applyPosition = models.CharField("报考职位", max_length = 100, blank = True, null = True)
+    phone = models.CharField("手机号码", max_length = 11, blank = True, null = True)
+    date = models.DateField('考试日期', blank = True, null = True)
+    checkInTime = models.CharField("报到时间", max_length = 20, blank = True, null = True)
+    drawTime = models.CharField("抽签时间", max_length = 20, blank = True, null = True)
+    deadlineTime = models.CharField("截止时间", max_length = 20, blank = True, null = True)
+    stratIVTime = models.CharField("开始时间", max_length = 20, blank = True, null = True)
+    siteName = models.CharField('考点名称', max_length = 100, blank = True, null = True)
+    address = models.CharField('考点地址', max_length = 100, blank = True, null = True)
+    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
+    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True) 
+    ifQuery = models.BooleanField("是否已查询", default = '0')
+    ifPrint = models.BooleanField("是否已打印", default = '0')
+    state = models.BooleanField("当前状态", default = '0')
 
 class ExamSite(models.Model):  #考点模型类
     name = models.CharField('考点名称', max_length = 100)

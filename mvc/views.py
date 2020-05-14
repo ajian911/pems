@@ -1,13 +1,14 @@
 import os
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,FileResponse
 from django.http import HttpResponseRedirect
+from django.utils.http import urlquote
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 from django.core.paginator import Paginator
 from mvc.forms import *
-from utils.formatter import pageBar
+from utils.dataUtil import excelImport2Db
 
 # Create your views here.
 PAGE_SIZE = 3
@@ -84,16 +85,26 @@ def setPrintService(request, examId):
      currentExam = Exam.objects.get(id = examId)
      #print("The currentExam name is {}".format(currentExam.name))
      #最近上传的导入数据文件
-
+     fileInfoList = FileInfo.objects.filter(examId = examId).order_by('-time')
+     #print("The last upload file name is {}".format(lastFileInfo[0].name))
+     if(len(fileInfoList) > 0):
+         lastFile = fileInfoList[0]
+     else:
+         lastFile = 'none'
      context = {
          'currentExam' :  currentExam,
+         'lastFile' : lastFile,
      }
      return render(request, "printService.html", context)
 
 @csrf_exempt
 def upload(request, examId):
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
-    #print("The PROJECT_ROOT is {}".format(PROJECT_ROOT))
+    currentExam = Exam.objects.get(id = examId)
+    if(currentExam.examMethod == '笔试'):
+        targetTable = 'admissionticket'
+    elif(currentExam.examMethod == '面试'):
+        targetTable = 'interviewnotification'
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -105,13 +116,17 @@ def upload(request, examId):
                 for chunk in eachFile.chunks():
                     destination.write(chunk)
                     destination.close()
-    return HttpResponse("<h1>文件上传成功</h1>") #应返回打印设置页面
+                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), targetTable, examId)
+    #excel文件数据导入pems-db
+    #根据examId获取考试形式，确定操作对象是准考证还是通知书
+    return HttpResponse("<h1>文件导入成功</h1>") #应返回打印设置页面
+
 
 @csrf_exempt
 def download(request, fileId):
-    fileInfo = FileInfo.objects.get(id = fileId)       
-    file = open(fileInfo.path, 'rb')
+    fileInfo = FileInfo.objects.get(id = fileId)    
+    filePath = os.path.join(fileInfo.path, fileInfo.name)   
+    file = open(filePath, 'rb')
     response = FileResponse(file)
     response['Content-Disposition'] = 'attachment;filename="%s"' % urlquote(fileInfo.name)
-    return response
-   
+    return response  
