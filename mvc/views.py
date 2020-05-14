@@ -116,13 +116,8 @@ def upload(request, examId):
                 for chunk in eachFile.chunks():
                     destination.write(chunk)
                     destination.close()
-                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), targetTable, examId)
-    #excel文件数据导入pems-db
-    #根据examId获取考试形式，确定操作对象是准考证还是通知书
+                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), targetTable, examId)#excel文件数据导入pems-db
     return HttpResponse("<h1>文件导入成功</h1>") #应返回打印设置页面
-
-    #excel文件数据导入pems-db
-    return HttpResponse("<h1>文件上传成功</h1>") #应返回打印设置页面
 
 @csrf_exempt
 def download(request, fileId):
