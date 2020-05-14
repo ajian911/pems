@@ -21,8 +21,8 @@
     
     <form enctype="multipart/form-data" action="upload/{{currentExam.id}}" method="post">
         {% csrf_token %}
-        <p><input type="file" name="file"></p>
-        <input type="submit" name="上传文件">
+        <p><input type="file" name="file"><input type="submit" name="上传文件"></p>
+        
     </form>
 </body>
 
