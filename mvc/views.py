@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.template import loader
 from django.core.paginator import Paginator
 from mvc.forms import *
-from utils.formatter import pageBar
+from utils.dataUtil import excelImport2Db
 
 # Create your views here.
 PAGE_SIZE = 3
@@ -100,7 +100,11 @@ def setPrintService(request, examId):
 @csrf_exempt
 def upload(request, examId):
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
-    #print("The PROJECT_ROOT is {}".format(PROJECT_ROOT))
+    currentExam = Exam.objects.get(id = examId)
+    if(currentExam.examMethod == '笔试'):
+        targetTable = 'admissionticket'
+    elif(currentExam.examMethod == '面试'):
+        targetTable = 'interviewnotification'
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -112,8 +116,8 @@ def upload(request, examId):
                 for chunk in eachFile.chunks():
                     destination.write(chunk)
                     destination.close()
-    #excel文件数据导入pems-db
-    return HttpResponse("<h1>文件上传成功</h1>") #应返回打印设置页面
+                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), targetTable, examId)#excel文件数据导入pems-db
+    return HttpResponse("<h1>文件导入成功</h1>") #应返回打印设置页面
 
 @csrf_exempt
 def download(request, fileId):
@@ -122,5 +126,4 @@ def download(request, fileId):
     file = open(filePath, 'rb')
     response = FileResponse(file)
     response['Content-Disposition'] = 'attachment;filename="%s"' % urlquote(fileInfo.name)
-    return response
-   
+    return response  
