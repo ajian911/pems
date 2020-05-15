@@ -101,10 +101,6 @@ def setPrintService(request, examId):
 def upload(request, examId):
     PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
     currentExam = Exam.objects.get(id = examId)
-    if(currentExam.examMethod == '笔试'):
-        targetTable = 'AT'
-    elif(currentExam.examMethod == '面试'):
-        targetTable = 'IN'
     if request.method == 'POST':
         form = UploadForm(request.POST, request.FILES)
         if form.is_valid():
@@ -116,7 +112,7 @@ def upload(request, examId):
                 for chunk in eachFile.chunks():
                     destination.write(chunk)
                     destination.close()
-                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), targetTable, examId)#excel文件数据导入pems-db
+                excelImport2Db(os.path.join(os.path.join(PROJECT_ROOT, 'upload/'), eachFile.name), examId)#excel文件数据导入pems-db
     #return HttpResponse("<h1>文件导入成功</h1>") #应返回打印设置页面
     #return redirect('http://127.0.0.1:8000/mvc/setPrintService/1/') 
     currentExam = Exam.objects.get(id = examId) 
