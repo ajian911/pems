@@ -125,9 +125,8 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-TINYMCE_DEFAULT_CONFIG = {
-    'mode': 'textareas',
-    'theme': 'advanced',
-    'width': 600,
-    'height': 400,
+TINYMCE_DEFAULT_CONFIG= {
+    'theme':'advanced',
+    'width':600,
+    'height':400,
 }

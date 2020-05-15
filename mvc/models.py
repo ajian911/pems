@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-from tinymce.models import HTMLField
+#from tinymce.models import HTMLField
+from tinymce import models as tinymce_models
 
 
 # Create your models here.
@@ -43,7 +44,7 @@ class ATSetInfo(models.Model): #笔试准考证设置信息
     exam = models.OneToOneField(Exam, on_delete = models.CASCADE, verbose_name = '关联考试')  
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True)
-    content = HTMLField('模板内容')
+    content = tinymce_models.HTMLField('模板内容')
     state = models.BooleanField("是否启动", default = '0') #0未启动，1启动中
     
 class INSetInfo(models.Model): #面试通知书设置信息
@@ -55,7 +56,7 @@ class INSetInfo(models.Model): #面试通知书设置信息
     startIVTime = models.TimeField("开始时间",  auto_now = False, auto_now_add = False, blank = True, null = True)
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, blank = True, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, blank = True, null = True) 
-    content = HTMLField('模板内容')
+    content = tinymce_models.HTMLField('模板内容')
     state = models.BooleanField("是否启动", default = '0')
 
 
