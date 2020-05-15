@@ -22,7 +22,7 @@ from mvc import views
 urlpatterns = [
     url(r'mvc/', include('mvc.urls')),
     path('admin/', admin.site.urls),
-    re_path(r'^tinymce/', include('tinymce.urls')),
+    url(r'^tinymce/', include('tinymce.urls')),
     url(r'', views.index),
     
 ]
