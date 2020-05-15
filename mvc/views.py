@@ -82,20 +82,25 @@ def getExamList(request, pageIndex):
 
 @csrf_exempt
 def setPrintService(request, examId):
-     currentExam = Exam.objects.get(id = examId)
-     #print("The currentExam name is {}".format(currentExam.name))
-     #最近上传的导入数据文件
-     fileInfoList = FileInfo.objects.filter(examId = examId).order_by('-time')
-     #print("The last upload file name is {}".format(lastFileInfo[0].name))
-     if(len(fileInfoList) > 0):
-         lastFile = fileInfoList[0]
-     else:
-         lastFile = 'none'
-     context = {
-         'currentExam' :  currentExam,
-         'lastFile' : lastFile,
-     }
-     return render(request, "printService.html", context)
+    currentExam = Exam.objects.get(id = examId)
+    if(currentExam.examMethod == '笔试'):
+        printForm = ATForm()
+    elif(currentExam.examMethod == '面试'):
+        printForm = INForm()
+    #print("The currentExam name is {}".format(currentExam.name))
+    #最近上传的导入数据文件
+    fileInfoList = FileInfo.objects.filter(examId = examId).order_by('-time')
+    #print("The last upload file name is {}".format(lastFileInfo[0].name))
+    if(len(fileInfoList) > 0):
+        lastFile = fileInfoList[0]
+    else:
+        lastFile = 'none'
+    context = {
+        'currentExam' :  currentExam,
+        'lastFile' : lastFile,
+        'printForm' : printForm,
+    }
+    return render(request, "printService.html", context)
 
 @csrf_exempt
 def upload(request, examId):
@@ -135,3 +140,29 @@ def download(request, fileId):
     response = FileResponse(file)
     response['Content-Disposition'] = 'attachment;filename="%s"' % urlquote(fileInfo.name)
     return response  
+
+@csrf_exempt
+def addAT(request):
+    if request.method == 'POST':
+        form = ATForm(request.POST)
+        if form.is_valid():
+            AT = form.save()
+            AT.save()
+            return HttpResponseRedirect(reverse('add-site-result'))
+    else:
+        form = ATForm()
+    PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
+    return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'printService.html'), {'ATform': form})  
+
+@csrf_exempt
+def addIN(request):
+    if request.method == 'POST':
+        form = INForm(request.POST)
+        if form.is_valid():
+            IN = form.save()
+            IN.save()
+            return HttpResponseRedirect(reverse('add-site-result'))
+    else:
+        form = INForm()
+    PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
+    return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'addIN.html'), {'form':form})  

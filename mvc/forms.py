@@ -14,3 +14,13 @@ class ExamForm(ModelForm):
 
 class UploadForm(forms.Form):
     file = forms.FileField(widget = forms.ClearableFileInput(attrs = {'multiple': True}), label = '选择文件...', help_text = '最大100M')
+
+class ATForm(ModelForm):
+    class Meta:
+        model = ATSetInfo
+        fields = ('beginTime', 'endTime', 'content', 'state')
+
+class INForm(ModelForm):
+    class Meta:
+        model = INSetInfo
+        fields = ('checkInTime', 'drawTime', 'deadlineTime', 'startIVTime', 'beginTime', 'endTime', 'content', 'state')

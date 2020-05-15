@@ -41,11 +41,7 @@ INSTALLED_APPS = [
     'tinymce',
 ]
 
-TINYMCE_DEFAULT_CONFIG = {
-'theme': 'advanced',
-'width': 600,
-'height': 400,
-}
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -78,8 +74,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'pems.wsgi.application'
 
 UPLOAD_ROOT = os.path.join(BASE_DIR,'upload')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
 
 DATABASES = {
     'default': {
@@ -126,3 +124,10 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+TINYMCE_DEFAULT_CONFIG = {
+    'mode': 'textareas',
+    'theme': 'advanced',
+    'width': 600,
+    'height': 400,
+}
