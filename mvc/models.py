@@ -30,8 +30,12 @@ class Exam(models.Model):  #考试模型类
     id = models.AutoField(primary_key = True)
     name = models.CharField('考试名称', max_length = 100)
     date = models.DateField('考试日期')
-    subjectName = models.CharField('考试科目', max_length = 100, blank = True, null = True)
-    subjectTime = models.CharField('科目时间', max_length = 100, blank = True, null = True)
+    subject_1_Name = models.CharField('考试科目', max_length = 100, blank = True, null = True)
+    subject_1_Time = models.CharField('科目时间', max_length = 100, blank = True, null = True)
+    subject_2_Name = models.CharField('考试科目', max_length = 100, blank = True, null = True)
+    subject_2_Time = models.CharField('科目时间', max_length = 100, blank = True, null = True)
+    subject_3_Name = models.CharField('考试科目', max_length = 100, blank = True, null = True)
+    subject_3_Time = models.CharField('科目时间', max_length = 100, blank = True, null = True)
     siteName = models.CharField('考点名称', max_length = 100, blank = True, null = True)
     siteAddress = models.CharField('考点地址', max_length = 100, blank = True, null = True)
     examineeNum = models.IntegerField('考生人数', blank = True, null = True)
@@ -44,6 +48,7 @@ class ATSetInfo(models.Model): #笔试准考证设置信息
     exam = models.OneToOneField(Exam, on_delete = models.CASCADE, verbose_name = '关联考试', blank = True, null = True)  
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True)
+    printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
     content = RichTextUploadingField('模板内容')
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0') #0未启动，1启动中
@@ -57,6 +62,7 @@ class INSetInfo(models.Model): #面试通知书设置信息
     startIVTime = models.TimeField("开始时间",  auto_now = False, auto_now_add = False, blank = True, null = True)
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, blank = True, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, blank = True, null = True) 
+    printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
     content = RichTextUploadingField('模板内容')
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0')
