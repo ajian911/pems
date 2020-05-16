@@ -32,14 +32,14 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'mvc.apps.MvcConfig',
-    'tinymce',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'ckeditor',
+    'ckeditor_uploader',   
 ]
 
 
@@ -126,20 +126,11 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-TINYMCE_JS_URL = 'http://debug.example.org/tiny_mce/tiny_mce_src.js'
-TINYMCE_DEFAULT_CONFIG = {
-    'theme': "advanced", 
-    "height": "320px",
-    "width": "960px",
-    "menubar": "file edit view insert format tools table help",
-    "plugins": "advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code "
-    "fullscreen insertdatetime media table paste code help wordcount spellchecker",
-    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
-    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
-    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
-    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
-    "a11ycheck ltr rtl | showcomments addcomment code",
-    "custom_undo_redo_levels": 10,
+CKEDITOR_UPLOAD_PATH = 'upload'
+CKEDITOR_CONFIGS = {
+    'default' : {
+        'toolbar' : 'Full'
+    }
 }
-TINYMCE_SPELLCHECKER = True
-TINYMCE_COMPRESSOR = True
+#CKEDITOR_ALLOW_NONIMAGE_FILES = False
+#CKEDITOR_BROWSE_SHOW_DIRS = True
