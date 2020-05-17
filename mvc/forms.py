@@ -26,4 +26,4 @@ class INForm(ModelForm):
     #content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
     class Meta:
         model = INSetInfo
-        fields = '__all__'
+        fields = ('beginTime','endTime','state','content')

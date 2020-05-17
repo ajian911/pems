@@ -1,8 +1,7 @@
 from django.db import models
 from django.utils import timezone
-#from tinymce.models import HTMLField
-#from tinymce import models as tinymce_models
-from ckeditor_uploader.fields import RichTextUploadingField
+from tinymce.models import HTMLField
+#from ckeditor_uploader.fields import RichTextUploadingField
 
 # Create your models here.
 #考试类别
@@ -49,7 +48,7 @@ class ATSetInfo(models.Model): #笔试准考证设置信息
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True)
     printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
-    content = RichTextUploadingField('模板内容')
+    content = HTMLField('模板内容')
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0') #0未启动，1启动中
     
@@ -63,11 +62,9 @@ class INSetInfo(models.Model): #面试通知书设置信息
     beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, blank = True, null = True)
     endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, blank = True, null = True) 
     printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
-    content = RichTextUploadingField('模板内容')
+    content = HTMLField('模板内容')
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0')
-
-
 
 class Examinee(models.Model): #考生模型类
     id = models.AutoField(primary_key = True)
@@ -80,8 +77,6 @@ class Examinee(models.Model): #考生模型类
     phone = models.CharField("手机号码", max_length = 11, blank = True, null = True)
     ifQuery = models.BooleanField("是否已查询", default = '0') #0未查询，1已查询
     ifPrint = models.BooleanField("是否已打印", default = '0') #0未打印，1已打印
-
-
 
 class ExamSite(models.Model):  #考点模型类
     name = models.CharField('考点名称', max_length = 100)
@@ -117,3 +112,6 @@ class FileInfo(models.Model):
     size = models.DecimalField("文件大小", max_digits = 10, decimal_places = 0)
     path = models.CharField("文件路径", max_length = 200)
     time = models.DateTimeField("上传时间", default = timezone.now())
+
+class testModel(models.Model):
+    content = HTMLField('内容')
