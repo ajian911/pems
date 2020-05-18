@@ -84,10 +84,7 @@ def getExamList(request, pageIndex):
 def setPrintService(request, examId):
     currentExam = Exam.objects.get(id = examId)
     dic = {'content': 'test' }
-    if(currentExam.examMethod == '笔试'):
-        printForm = ATForm(dic)
-    elif(currentExam.examMethod == '面试'):
-        printForm = INForm(dic)
+    ptForm = PTForm(dic)   
     #print("The currentExam name is {}".format(currentExam.name))
     #最近上传的导入数据文件
     fileInfoList = FileInfo.objects.filter(examId = examId).order_by('-time')
@@ -99,7 +96,7 @@ def setPrintService(request, examId):
     context = {
         'currentExam' :  currentExam,
         'lastFile' : lastFile,
-        'printForm' : printForm,
+        'ptForm' : ptForm,
     }
     return render(request, "printService.html", context)
 

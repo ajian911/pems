@@ -2,6 +2,7 @@ from django.forms import ModelForm
 from django import forms
 from mvc.models import *
 from tinymce.widgets import TinyMCE
+from django.contrib.admin import widgets
 
 class SiteForm(ModelForm):
     class Meta:
@@ -16,14 +17,11 @@ class ExamForm(ModelForm):
 class UploadForm(forms.Form):
     file = forms.FileField(widget = forms.ClearableFileInput(attrs = {'multiple': True}), label = '选择文件...', help_text = '最大100M')
 
-class ATForm(ModelForm):
+class PTForm(ModelForm):
     #content = forms.CharField(widget=TinyMCE(attrs={'cols': 50, 'rows': 10}))
+    #beginTime = forms.DateTimeField(required = True, label = '开始打印时间', widget = widgets.AdminSplitDateTime)
+    #endTime = forms.DateTimeField(required = True, label = '结束打印时间', widget = widgets.AdminSplitDateTime)
     class Meta:
-        model = ATSetInfo
-        fields = '__all__'
+        model = printTemplate
+        fields = ('beginTime','endTime','content','state','loginURL')
 
-class INForm(ModelForm):
-    #content = forms.CharField(widget=TinyMCE(attrs={'cols': 80, 'rows': 30}))
-    class Meta:
-        model = INSetInfo
-        fields = ('beginTime','endTime','state','content')

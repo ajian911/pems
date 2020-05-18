@@ -42,29 +42,16 @@ class Exam(models.Model):  #考试模型类
     examMethod = models.CharField('考试形式', max_length = 20, choices = METHOD_CHOICES, default = METHOD_CHOICES[1])
     remarks = models.TextField('备注', max_length = 500, blank = True, null = True)
 
-class ATSetInfo(models.Model): #笔试准考证设置信息
+class printTemplate(models.Model): #笔试准考证设置信息
     id = models.AutoField(primary_key = True)
     exam = models.OneToOneField(Exam, on_delete = models.CASCADE, verbose_name = '关联考试', blank = True, null = True)  
-    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True)
-    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True)
+    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, null = True, blank = True)
+    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, null = True, blank = True)
     printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
     content = HTMLField('模板内容')
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0') #0未启动，1启动中
-    
-class INSetInfo(models.Model): #面试通知书设置信息
-    id = models.AutoField(primary_key = True)
-    exam = models.OneToOneField(Exam, on_delete = models.CASCADE, verbose_name = '关联考试', blank = True, null = True) 
-    checkInTime = models.TimeField("报到时间", auto_now = False, auto_now_add = False, blank = True, null = True)
-    drawTime = models.TimeField("抽签时间",  auto_now = False, auto_now_add = False, blank = True, null = True)
-    deadlineTime = models.TimeField("截止时间", auto_now = False, auto_now_add = False, blank = True, null = True)
-    startIVTime = models.TimeField("开始时间",  auto_now = False, auto_now_add = False, blank = True, null = True)
-    beginTime = models.DateTimeField("开始打印时间", auto_now = False, auto_now_add = False, blank = True, null = True)
-    endTime = models.DateTimeField("结束打印时间", auto_now = False, auto_now_add = False, blank = True, null = True) 
-    printType = models.CharField('模板类别', max_length = 20, choices = TYPE_CHOICES, default = TYPE_CHOICES[3])
-    content = HTMLField('模板内容')
-    ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
-    state = models.BooleanField("是否启动", default = '0')
+    loginURL = models.CharField('登录网址', max_length = 200, blank = True, null = True)
 
 class Examinee(models.Model): #考生模型类
     id = models.AutoField(primary_key = True)
