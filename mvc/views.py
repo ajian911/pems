@@ -83,7 +83,8 @@ def getExamList(request, pageIndex):
 @csrf_exempt
 def setPrintService(request, examId):
     currentExam = Exam.objects.get(id = examId)
-    dic = {'content': 'test' }
+    basePT = printTemplate.objects.filter(printType = currentExam.examType, ifBase = '1')
+    dic = {'beginTime' : basePT[0].beginTime,'endTime' : basePT[0].endTime, 'content': basePT[0].content }
     ptForm = PTForm(dic)   
     #print("The currentExam name is {}".format(currentExam.name))
     #最近上传的导入数据文件
@@ -140,27 +141,11 @@ def download(request, fileId):
     return response  
 
 @csrf_exempt
-def addAT(request):
+def savePrintTemplate(request, examId):
     if request.method == 'POST':
-        form = ATForm(request.POST)
-        if form.is_valid():
-            AT = form.save()
-            AT.save()
-            return HttpResponseRedirect(reverse('add-site-result'))
-    else:
-        form = ATForm()
-    PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
-    return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'printService.html'), {'ATform': form})  
-
-@csrf_exempt
-def addIN(request):
-    if request.method == 'POST':
-        form = INForm(request.POST)
-        if form.is_valid():
-            IN = form.save()
-            IN.save()
-            return HttpResponseRedirect(reverse('add-site-result'))
-    else:
-        form = INForm()
-    PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) #项目根路径
-    return render(request, os.path.join(PROJECT_ROOT, 'mvc/templates', 'addIN.html'), {'form':form})  
+        #ptForm = PTForm(request.POST)
+        print("the endTime is {}".format(request.POST['endTime']))
+        #if ptForm.is_valid():
+        PT = printTemplate(beginTime = request.POST['beginTime'], endTime = request.POST['endTime'], content = request.POST['content'], state = request.POST['state'])
+        PT.save()
+        return HttpResponseRedirect(reverse('add-site-result'))
