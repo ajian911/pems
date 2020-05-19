@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ckeditor',
-    'ckeditor_uploader', 
+    #'ckeditor',
+    #'ckeditor_uploader', 
     'tinymce',
 ]
 
@@ -75,8 +75,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pems.wsgi.application'
 
-UPLOAD_ROOT = os.path.join(BASE_DIR,'upload')
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'upload')
+
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -127,12 +128,13 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
-CKEDITOR_UPLOAD_PATH = 'upload'
-CKEDITOR_CONFIGS = {
-    'default' : {
-        'toolbar' : 'Full'
-    }
-}
+
+#CKEDITOR_UPLOAD_PATH = 'upload'
+#CKEDITOR_CONFIGS = {
+    #'default' : {
+        #'toolbar' : 'Full'
+    #}
+#}
 #CKEDITOR_ALLOW_NONIMAGE_FILES = False
 #CKEDITOR_BROWSE_SHOW_DIRS = True
 

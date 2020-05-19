@@ -2,6 +2,7 @@ from django.conf.urls import url,re_path
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
     url(r'addSite/', views.addSite),
     url(r'addExam/', views.addExam),
