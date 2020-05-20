@@ -9,6 +9,7 @@ from django.template import loader
 from django.core.paginator import Paginator
 from mvc.forms import *
 from utils.dataUtil import excelImport2Db
+from django.utils import timezone
 
 # Create your views here.
 PAGE_SIZE = 3
@@ -83,9 +84,14 @@ def getExamList(request, pageIndex):
 @csrf_exempt
 def setPrintService(request, examId):
     currentExam = Exam.objects.get(id = examId)
-    basePT = printTemplate.objects.filter(printType = currentExam.examType, ifBase = '1')
-    dic = {'beginTime' : basePT[0].beginTime,'endTime' : basePT[0].endTime, 'content': basePT[0].content }
-    ptForm = PTForm(dic)   
+    relatePT = printTemplate.objects.filter(exam_id = examId) #查询当前考试对应的打印模板
+    if(relatePT.exists()):
+        dic = {'beginTime' : relatePT[0].beginTime,'endTime' : relatePT[0].endTime, 'content': relatePT[0].content, 'state':relatePT[0].state, 'loginURL':relatePT[0].loginURL }
+        ptForm = PTForm(dic) 
+    else:  #相对应的打印模板还未保存
+        basePT = printTemplate.objects.filter(printType = currentExam.examType, ifBase = '1')
+        dic = {'beginTime' : basePT[0].beginTime,'endTime' : basePT[0].endTime, 'content': basePT[0].content }
+        ptForm = PTForm(dic)   
     #print("The currentExam name is {}".format(currentExam.name))
     #最近上传的导入数据文件
     fileInfoList = FileInfo.objects.filter(examId = examId).order_by('-time')
@@ -142,10 +148,32 @@ def download(request, fileId):
 
 @csrf_exempt
 def savePrintTemplate(request, examId):
+    currentExam = Exam.objects.get(id = examId)
     if request.method == 'POST':
         #ptForm = PTForm(request.POST)
-        print("the endTime is {}".format(request.POST['endTime']))
+        #print("the endTime is {}".format(request.POST))
+        #print("the endTime is {}".format(request.POST['endTime']))
         #if ptForm.is_valid():
-        PT = printTemplate(beginTime = request.POST['beginTime'], endTime = request.POST['endTime'], content = request.POST['content'], state = request.POST['state'])
-        PT.save()
+        if(request.POST['state'] == 'on'):
+            currentState = 1
+        else:
+            currentState = 0
+        relatePT = printTemplate.objects.filter(exam_id = examId) #查询当前考试对应的打印模板
+        if(relatePT.exists()): 
+            relatePT[0].beginTime = request.POST['beginTime']
+            relatePT[0].endime = request.POST['endTime']
+            relatePT[0].content = request.POST['content'] 
+            relatePT[0].state = request.POST['state']
+            relatePT[0].loginURL = request.POST['loginURL']
+            relatePT[0].save()
+        else:
+            PT = printTemplate(exam_id = examId,
+                           printType = currentExam.examType,
+                           beginTime = request.POST['beginTime'], 
+                           endTime = request.POST['endTime'], 
+                           content = request.POST['content'], 
+                           state = currentState,
+                           loginURL = "http://127.0.0.1/printLogin/" + examId + "/"
+                           )                  
+            PT.save()
         return HttpResponseRedirect(reverse('add-site-result'))

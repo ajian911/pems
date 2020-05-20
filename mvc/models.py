@@ -52,6 +52,7 @@ class printTemplate(models.Model): #笔试准考证设置信息
     ifBase = models.BooleanField("是否基础模板", default = '0') #0是非基础模板,1是基础模板
     state = models.BooleanField("是否启动", default = '0') #0未启动，1启动中
     loginURL = models.CharField('登录网址', max_length = 200, blank = True, null = True)
+    
 
 class Examinee(models.Model): #考生模型类
     id = models.AutoField(primary_key = True)
