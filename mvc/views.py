@@ -177,3 +177,11 @@ def savePrintTemplate(request, examId):
                            )                  
             PT.save()
         return HttpResponseRedirect(reverse('add-site-result'))
+
+@csrf_exempt
+def printMain(request, examId):
+    currentExam = Exam.objects.get(id = examId)
+    context = {
+        'currentExam' :  currentExam,
+    }
+    return render(request, "printMain.html", context)

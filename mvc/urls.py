@@ -13,6 +13,7 @@ urlpatterns = [
     #path('setPrintService/<examId>', views.setPrintService),
     re_path(r'^setPrintService/(?P<examId>[0-9]+)/$', views.setPrintService, name = 'setPrintService'), 
     re_path(r'^savePrintTemplate/(?P<examId>[0-9]+)/$', views.savePrintTemplate, name = 'savePrintTemplate'), 
+    re_path(r'^printMain/(?P<examId>[0-9]+)/$', views.printMain, name = 'views.printMain'), 
     url(r'4', views.addExamResult, name = 'add-exam-result'),
     url(r'5', views.addSiteResult, name = 'add-site-result'),
 ]
